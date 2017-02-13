@@ -7,14 +7,14 @@ import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
-import ui.ListUpdate;
-import applications.PetManager;
 import domain.Person;
+import applications.PetManager;
+import ui.ListUpdate;
 
 public class PeopleTableModel extends AbstractTableModel implements Observer{
+	
 	private static final long serialVersionUID = -7806713335094648742L;
 	private PetManager application;
-	
 	private String[] columns = {"ID", "Name","Job","Pets"};
 
 	public PeopleTableModel(PetManager application) {
@@ -39,7 +39,6 @@ public class PeopleTableModel extends AbstractTableModel implements Observer{
 			}
 		}
 	}
-
 
 	public int getColumnCount() {
 		return columns.length;
@@ -129,12 +128,9 @@ public class PeopleTableModel extends AbstractTableModel implements Observer{
 			} 
 		}
 	}
-	
-
 
 	public Person getPersonAt(int index) {
 		return application.getPersonAt(index);
 	}
-	
 	
 }

@@ -9,11 +9,11 @@ import java.util.Observable;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import domain.Person;
 import persistence.ActiveRecordManager;
 import ui.ListUpdate;
 import ui.PetManagerFrame;
 import ui.StatisticWindow;
-import domain.Person;
 
 public class PetManager extends Observable {
 	
@@ -22,7 +22,6 @@ public class PetManager extends Observable {
 	public PetManager() {
 		peopleList = Person.findAll();
 	}
-	
 	
 	public List<Person> getPeopleList() {
 		return peopleList;
@@ -54,7 +53,9 @@ public class PetManager extends Observable {
 		up.addDeletes(removeIndexes);
 		notifyObservers(up);
 	}
+	
 	public void setPerson(int position, Person personToReplace) {
+		personToReplace.save();
 		peopleList.set(position, personToReplace);
 		setChanged();
 		ListUpdate up = new ListUpdate();
@@ -70,10 +71,8 @@ public class PetManager extends Observable {
 		return sum / peopleList.size();
 	}
 
-
 	public static void main(String[] args) {
 		createTablesIfMissing();
-		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				PetManager application = new PetManager();
@@ -82,9 +81,7 @@ public class PetManager extends Observable {
 				editView.setVisible(true);
 				StatisticWindow toolbar = new StatisticWindow(editView, application);
 				toolbar.setVisible(true);
-
 				editView.setLocation(100, 100);
-				
 				
 //				// Second view to test observer pattern
 //				PetManagerFrame editView2 = new PetManagerFrame(application);
@@ -118,4 +115,5 @@ public class PetManager extends Observable {
 		stat.executeUpdate("create table people (id INTEGER PRIMARY KEY AUTOINCREMENT, name, job);");
 		stat.executeUpdate("create table pet (id INTEGER PRIMARY KEY AUTOINCREMENT,owner INTEGER REFERENCES people(id), name, breed);");
 	}
+	
 }

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import persistence.ActiveRecordManager;
 import persistence.ActiveRecord;
+import persistence.ActiveRecordManager;
 
 public class Person extends Observable implements ActiveRecord {
 
@@ -46,7 +46,6 @@ public class Person extends Observable implements ActiveRecord {
 	public List<Pet> getPets() {
 		return pets;
 	}
-	
 
 	public int getID() {
 		return id;
@@ -58,13 +57,9 @@ public class Person extends Observable implements ActiveRecord {
 	public boolean save() {
 		try {
 			if (!isInDB())
-				id = ActiveRecordManager.executeInsert(
-								"insert into people (name,job) values (?,?)",
-								name, job);
+				id = ActiveRecordManager.executeInsert("insert into people (name,job) values (?,?)", name, job);
 			else {
-				ActiveRecordManager.execute(
-						"UPDATE people SET name = ?, job = ? WHERE id = ?",
-						name, job, Integer.toString(id));
+				ActiveRecordManager.execute("UPDATE people SET name = ?, job = ? WHERE id = ?", name, job, Integer.toString(id));
 			}
 			for (Pet p : pets) {
 				p.save();
@@ -83,11 +78,12 @@ public class Person extends Observable implements ActiveRecord {
 	 */
 	public boolean delete() {
 		try {
-			if (isInDB())
-				ActiveRecordManager.execute("DELETE FROM pet WHERE owner=?;", Integer
-						.toString(id));
-			ActiveRecordManager.execute("DELETE FROM people WHERE id=?;", Integer
-					.toString(id));
+			if (isInDB()) {
+				ActiveRecordManager.execute("DELETE FROM pet WHERE owner=?;", Integer.toString(id));
+				ActiveRecordManager.execute("DELETE FROM people WHERE id=?;", Integer.toString(id));
+				List<Integer> lastIdList = ActiveRecordManager.getIntegerList("SELECT MAX(id) FROM people;");
+				ActiveRecordManager.execute("UPDATE sqlite_sequence SET seq=? WHERE name='people';", lastIdList.get(0).toString());
+			}
 		} catch (SQLException e) {
 			System.err.println(e);
 			return false;
@@ -105,7 +101,6 @@ public class Person extends Observable implements ActiveRecord {
 	public boolean equals(Object obj) {
 		if (obj instanceof Person) {
 			Person pers = (Person) obj;
-			
 			if(isInDB()){
 				return id == pers.getID();
 			}

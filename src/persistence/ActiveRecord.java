@@ -13,4 +13,5 @@ public interface ActiveRecord{
 	public boolean isInDB();
 	
 	public boolean equals(Object obj);
+	
 }

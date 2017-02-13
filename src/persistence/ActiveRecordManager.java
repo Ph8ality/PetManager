@@ -26,10 +26,8 @@ public class ActiveRecordManager {
 				Class.forName("org.sqlite.JDBC");
 				connection = DriverManager.getConnection(database);
 				DatabaseMetaData metaData = connection.getMetaData();
-				System.out.println("sqlite driver mode: "
-						+ metaData.getDriverVersion());
-				System.out.println("database driver: "
-						+ metaData.getDriverName());
+				System.out.println("sqlite driver mode: " + metaData.getDriverVersion());
+				System.out.println("database driver: " + metaData.getDriverName());
 			}
 		} catch (ClassNotFoundException e) {
 			System.err.println("JDBC Driver nof found");
@@ -38,9 +36,6 @@ public class ActiveRecordManager {
 		return connection;
 	}
 
-	/**
-	 * execute an insert statement.
-	 */
 	public static int executeInsert(String sql) throws SQLException {
 		int newId = ActiveRecord.NOTINDB;
 		Statement stat = getConnection().createStatement();
@@ -50,12 +45,10 @@ public class ActiveRecordManager {
 		return newId;
 	}
 
-	public static int executeInsert(String prepStmt, String... arguments)
-			throws SQLException {
+	public static int executeInsert(String prepStmt, String... arguments) throws SQLException {
 		int newId = ActiveRecord.NOTINDB;
 		Connection conn = getConnection();
-		PreparedStatement prep = createStatementWithArguments(prepStmt, conn,
-				arguments);
+		PreparedStatement prep = createStatementWithArguments(prepStmt, conn, arguments);
 		prep.execute();
 		Statement stat = conn.createStatement();
 		newId = getIdOfInsertedElement(stat);
@@ -70,17 +63,15 @@ public class ActiveRecordManager {
 		stat.close();
 	}
 
-	public static void execute(String prepStmt, String... arguments)
-			throws SQLException {
+	public static void execute(String prepStmt, String... arguments) throws SQLException {
 		Connection conn = getConnection();
-		PreparedStatement prep = createStatementWithArguments(prepStmt, conn,
-				arguments);
+		PreparedStatement prep = createStatementWithArguments(prepStmt, conn, arguments);
 		prep.execute();
 		prep.close();
 	}
 
 	/**
-	 * Execute the query sql and return the, resulting {@link ActiveRecord}s as a
+	 * Execute the query sql and return the resulting {@link ActiveRecord}s as a
 	 * {@link List} of type returnedClass.<br>
 	 * 
 	 * @param returnedClass
@@ -94,19 +85,16 @@ public class ActiveRecordManager {
 			Statement stat = conn.createStatement();
 			ResultSet res = stat.executeQuery(sql);
 			while (res.next()) {
-				Constructor<T> ctor = returnedClass
-						.getConstructor(ResultSet.class);
+				Constructor<T> ctor = returnedClass.getConstructor(ResultSet.class);
 				T object = ctor.newInstance(res);
 				list.add(object);
 			}
 			stat.close();
 		} catch (NoSuchMethodException me) {
-			System.err.println("The class :" + returnedClass.getName()
-					+ " has no Constructor for ResultSet");
+			System.err.println("The class :" + returnedClass.getName() + " has no Constructor for ResultSet");
 			me.printStackTrace();
 		} catch (Exception e) {
-			System.out.println("Error while creating class out of a RowSet\n"
-					+ e);
+			System.out.println("Error while creating class out of a RowSet\n" + e);
 			e.printStackTrace();
 		}
 		return list;
@@ -128,24 +116,39 @@ public class ActiveRecordManager {
 		}
 		return resultlist;
 	}
+	
+	public static List<Integer> getIntegerList(String sql) {
+		List<Integer> resultlist = new ArrayList<Integer>();
+		Connection conn;
+		try {
+			conn = getConnection();
+			Statement stat = conn.createStatement();
+			ResultSet res = stat.executeQuery(sql);
+			while (res.next()) {
+				resultlist.add(res.getInt(1));
+			}
+			stat.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resultlist;
+	}
 
-	private static int getIdOfInsertedElement(Statement stat)
-			throws SQLException {
+	private static int getIdOfInsertedElement(Statement stat) throws SQLException {
 		int newId = ActiveRecord.NOTINDB;
 		ResultSet res = stat.executeQuery("SELECT last_insert_rowid();");
-		if (res.next())
+		if (res.next()) {
 			newId = res.getInt("last_insert_rowid()");
+		}
 		return newId;
 	}
 
-	private static PreparedStatement createStatementWithArguments(
-			String prepStmt, Connection conn, String... arguments)
-			throws SQLException {
+	private static PreparedStatement createStatementWithArguments(String prepStmt, Connection conn, String... arguments) throws SQLException {
 		PreparedStatement prep = conn.prepareStatement(prepStmt);
-
 		for (int i = 0; i < arguments.length; ++i) {
 			prep.setString(i + 1, arguments[i]);
 		}
 		return prep;
 	}
+	
 }

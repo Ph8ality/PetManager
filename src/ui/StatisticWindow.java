@@ -69,12 +69,10 @@ public class StatisticWindow extends JWindow implements Observer {
 			public void windowClosed(WindowEvent e) {
 				dispose();
 			}
-
 			@Override
 			public void windowActivated(WindowEvent e) {
 				toFront();
 			}
-
 			@Override
 			public void windowDeactivated(WindowEvent e) {
 				toBack();
@@ -85,7 +83,6 @@ public class StatisticWindow extends JWindow implements Observer {
 			public void componentMoved(ComponentEvent e) {
 				setPosition();
 			}
-
 			@Override
 			public void componentResized(ComponentEvent e) {
 				setPosition();
@@ -93,12 +90,10 @@ public class StatisticWindow extends JWindow implements Observer {
 		});
 	}
 
-
 	protected void setPosition() {
 		Rectangle mainRec = mainFrame.getBounds();
 		Rectangle newPos = this.getBounds();
-		newPos.setLocation((int) (mainRec.getX() + mainRec.getWidth()),
-				(int) mainRec.getY());
+		newPos.setLocation((int) (mainRec.getX() + mainRec.getWidth()), (int) mainRec.getY());
 		this.setBounds(newPos);
 	}
 
@@ -135,8 +130,7 @@ public class StatisticWindow extends JWindow implements Observer {
 	private JPanel getGradientPanel() {
 		if (gradientPanel == null) {
 			gradientPanel = new GradientPanel();
-			GroupLayout jPanel1Layout = new GroupLayout(
-					(JComponent) gradientPanel);
+			GroupLayout jPanel1Layout = new GroupLayout((JComponent) gradientPanel);
 			gradientPanel.setLayout(jPanel1Layout);
 			gradientPanel.setBackground(new java.awt.Color(255, 255, 255));
 			jPanel1Layout.setHorizontalGroup(jPanel1Layout
@@ -165,8 +159,7 @@ public class StatisticWindow extends JWindow implements Observer {
 	private JPanel getBackgroundPanel() {
 		if (backgroundPanel == null) {
 			backgroundPanel = new GradientPanel();
-			GroupLayout jContentPaneLayout = new GroupLayout(
-					(JComponent) backgroundPanel);
+			GroupLayout jContentPaneLayout = new GroupLayout((JComponent) backgroundPanel);
 			backgroundPanel.setLayout(jContentPaneLayout);
 			backgroundPanel.setPreferredSize(new java.awt.Dimension(130, 156));
 			jContentPaneLayout.setHorizontalGroup(jContentPaneLayout

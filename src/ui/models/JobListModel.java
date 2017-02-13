@@ -7,6 +7,7 @@ import javax.swing.DefaultComboBoxModel;
 import persistence.ActiveRecordManager;
 
 public class JobListModel extends DefaultComboBoxModel<String> {
+	
 	private static final long serialVersionUID = 2203210028486754372L;
 	private List<String> jobs;
 	

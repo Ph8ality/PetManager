@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import persistence.ActiveRecordManager;
 import persistence.ActiveRecord;
+import persistence.ActiveRecordManager;
 
 
 public class Pet implements ActiveRecord {
@@ -51,10 +51,11 @@ public class Pet implements ActiveRecord {
 		if(owner == null || !owner.isInDB())
 			return false;
 		try {
-			if (!isInDB())
-				id = ActiveRecordManager.executeInsert("insert into pet (name,breed,owner) values (?,?,?)",name,breed,Integer.toString(owner.getID()));
-			else
-				ActiveRecordManager.execute("UPDATE pet SET owner = ?, name = ?, breed = ? WHERE id = ?",Integer.toString(owner.getID()),name,breed,Integer.toString(id));
+			if (!isInDB()) {
+				id = ActiveRecordManager.executeInsert("insert into pet (name,breed,owner) values (?,?,?)", name, breed, Integer.toString(owner.getID()));
+			} else {
+				ActiveRecordManager.execute("UPDATE pet SET owner = ?, name = ?, breed = ? WHERE id = ?", Integer.toString(owner.getID()), name,breed, Integer.toString(id));
+			}
 		} catch (SQLException e) {
 			System.err.println(e);
 			return false;
@@ -87,7 +88,6 @@ public class Pet implements ActiveRecord {
 		return false;
 	}
 	
-	
 	public static List<Pet> findAll() {
 		String sql = "SELECT * FROM pet;";
 		return ActiveRecordManager.getObjectList(sql, Pet.class);
@@ -111,4 +111,5 @@ public class Pet implements ActiveRecord {
 	public void loadOwner() {
 		owner = Person.findByID(ownerID);
 	}
+	
 }

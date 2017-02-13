@@ -1,7 +1,6 @@
 package ui.renderers;
 
 import java.awt.FlowLayout;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -9,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class PetIconsPanel extends javax.swing.JPanel {
+	
 	private static final long serialVersionUID = -7300885155771024978L;
 	private ImageIcon zebra;
 
@@ -40,4 +40,5 @@ public class PetIconsPanel extends javax.swing.JPanel {
 			this.setPreferredSize(new java.awt.Dimension(144, 24));
 			this.setRequestFocusEnabled(false);
 	}
+	
 }

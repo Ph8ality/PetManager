@@ -17,21 +17,17 @@ class GradientPanel extends JPanel {
 			super.paintComponent(g);
 			return;
 		}
-
 		int w = getWidth();
 		int h = getHeight();
-
 		Color color1 = getBackground();
 		Color color2 = color1.darker();
-
 		Graphics2D g2d = (Graphics2D) g;
 		GradientPaint gp = new GradientPaint(0, 0, color1, 0, h, color2);
-
 		g2d.setPaint(gp);
 		g2d.fillRect(0, 0, w, h);
-
 		setOpaque(false);
 		super.paintComponent(g);
 		setOpaque(true);
 	}
+	
 }

@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -26,14 +25,14 @@ import javax.swing.table.TableRowSorter;
 import org.jdesktop.layout.GroupLayout;
 import org.jdesktop.layout.LayoutStyle;
 
+import domain.Person;
+import domain.Pet;
+import applications.PetManager;
 import ui.listeners.PeopleTableSelectionListener;
 import ui.models.JobListModel;
 import ui.models.PeopleTableModel;
 import ui.models.PetsTableModel;
 import ui.renderers.PetIconsTableCellRenderer;
-import applications.PetManager;
-import domain.Person;
-import domain.Pet;
 
 public class PetManagerFrame extends JFrame {
 
@@ -62,8 +61,7 @@ public class PetManagerFrame extends JFrame {
 		this.application = application;
 		buttonFont = new java.awt.Font("Tahoma", 0, 11);
 		try {
-			removeIcon = new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource(
-					"img/edit_remove.png")));
+			removeIcon = new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("img/edit_remove.png")));
 			addIcon = new ImageIcon(ImageIO.read(this.getClass().getClassLoader().getResource("img/edit_add.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -78,9 +76,7 @@ public class PetManagerFrame extends JFrame {
 	 */
 	public void updatePets(Person person) {
 		petsTable.setModel(new PetsTableModel(person));
-
 		petsTable.getColumn("ID").setPreferredWidth(10);
-
 		addPetButton.setEnabled(true);
 		removePetButton.setEnabled(true);
 	}
@@ -95,17 +91,14 @@ public class PetManagerFrame extends JFrame {
 		this.setTitle("PetManager 0.1");
 		this.setContentPane(getBackGroundPanel());
 		this.setSize(514, 484);
-		peopleTable.getColumn("Pets").setCellRenderer(
-				new PetIconsTableCellRenderer());
-		peopleTable.getSelectionModel().addListSelectionListener(
-				new PeopleTableSelectionListener(peopleTable, this));
+		peopleTable.getColumn("Pets").setCellRenderer(new PetIconsTableCellRenderer());
+		peopleTable.getSelectionModel().addListSelectionListener(new PeopleTableSelectionListener(peopleTable, this));
 	}
 
 	private JPanel getBackGroundPanel() {
 		if (backgroundPanel == null) {
 			backgroundPanel = new GradientPanel();
-			GroupLayout jContentPaneLayout = new GroupLayout(
-					(JComponent) backgroundPanel);
+			GroupLayout jContentPaneLayout = new GroupLayout((JComponent) backgroundPanel);
 			backgroundPanel.setLayout(jContentPaneLayout);
 			backgroundPanel.setPreferredSize(new java.awt.Dimension(477, 405));
 			jContentPaneLayout.setHorizontalGroup(jContentPaneLayout.createSequentialGroup()
@@ -154,6 +147,7 @@ public class PetManagerFrame extends JFrame {
 		return backgroundPanel;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private JTable getPeopleTable() {
 		if (peopleTable == null) {
 			PeopleTableModel model = new PeopleTableModel(application);
@@ -195,8 +189,7 @@ public class PetManagerFrame extends JFrame {
 			GroupLayout jTable1Layout = new GroupLayout((JComponent) petsTable);
 			petsTable.setLayout(null);
 			jTable1Layout.setVerticalGroup(jTable1Layout.createParallelGroup());
-			jTable1Layout.setHorizontalGroup(jTable1Layout
-					.createParallelGroup());
+			jTable1Layout.setHorizontalGroup(jTable1Layout.createParallelGroup());
 			petsTable.getColumn("ID").setPreferredWidth(10);
 		}
 		return petsTable;
@@ -210,6 +203,7 @@ public class PetManagerFrame extends JFrame {
 		return petTableScrollPane;
 	}
 
+	@SuppressWarnings("serial")
 	private JButton getAddPersonButton() {
 		if (addPersonButton == null) {
 			addPersonButton = new JButton();
@@ -230,6 +224,7 @@ public class PetManagerFrame extends JFrame {
 		return addPersonButton;
 	}
 
+	@SuppressWarnings("serial")
 	private JButton getRemovePersonButton() {
 		if (removePersonButton == null) {
 			removePersonButton = new JButton();
@@ -239,18 +234,13 @@ public class PetManagerFrame extends JFrame {
 					if (peopleTable.getSelectedRowCount() > 0) {
 						int[] selectionView = peopleTable.getSelectedRows();
 						int[] selectionModel = new int[selectionView.length];
-
 						for (int i = 0; i < selectionView.length; ++i) {
-							selectionModel[i] = peopleTable
-									.convertRowIndexToModel(selectionView[i]);
+							selectionModel[i] = peopleTable.convertRowIndexToModel(selectionView[i]);
 						}
-						((PeopleTableModel) getPeopleTable().getModel())
-								.removePersonAtRow(selectionView,
-										selectionModel);
+						((PeopleTableModel) getPeopleTable().getModel()).removePersonAtRow(selectionView, selectionModel);
 					}
 				}
 			});
-
 			removePersonButton.setIcon(removeIcon);
 			removePersonButton.setFont(buttonFont);
 		}
@@ -286,11 +276,9 @@ public class PetManagerFrame extends JFrame {
 				public void changedUpdate(DocumentEvent e) {
 					newFilter();
 				}
-
 				public void insertUpdate(DocumentEvent e) {
 					newFilter();
 				}
-
 				public void removeUpdate(DocumentEvent e) {
 					newFilter();
 				}
@@ -322,64 +310,45 @@ public class PetManagerFrame extends JFrame {
 		return (PeopleTableModel) getPeopleTable().getModel();
 	}
 
+	@SuppressWarnings("serial")
 	private final class RemovePetButtonListener extends AbstractAction {
 		public void actionPerformed(ActionEvent evt) {
 			if (petsTable.getSelectedRowCount() > 0) {
 				int viewSelectedRow = peopleTable.getSelectedRow();
-				int modelSelectedRow = peopleTable
-						.convertRowIndexToModel(viewSelectedRow);
-				PeopleTableModel peopleModel = (PeopleTableModel) peopleTable
-						.getModel();
+				int modelSelectedRow = peopleTable.convertRowIndexToModel(viewSelectedRow);
+				PeopleTableModel peopleModel = (PeopleTableModel) peopleTable.getModel();
 				Person person = application.getPersonAt(modelSelectedRow);
-				
 				int[] selectionView = petsTable.getSelectedRows();
 				int[] selectionModel = new int[selectionView.length];
-
 				for (int i = 0; i < selectionView.length; ++i) {
-					selectionModel[i] = petsTable
-							.convertRowIndexToModel(selectionView[i]);
+					selectionModel[i] = petsTable.convertRowIndexToModel(selectionView[i]);
 				}
-				((PetsTableModel) getPetsTable().getModel())
-						.removePetAtRow(selectionView,
-								selectionModel);
-
+				((PetsTableModel) getPetsTable().getModel()).removePetAtRow(selectionView, selectionModel);
 				peopleModel.reloadPerson(person);
-				
-				peopleTable.setRowSelectionInterval(viewSelectedRow,
-						viewSelectedRow);
+				peopleTable.setRowSelectionInterval(viewSelectedRow, viewSelectedRow);
 			}
 		}
 	}
 
+	@SuppressWarnings("serial")
 	private final class AddPetButtonListener extends AbstractAction {
 		public void actionPerformed(ActionEvent e) {
-			PetsTableModel petsModel = (PetsTableModel) petsTable
-					.getModel();
+			PetsTableModel petsModel = (PetsTableModel) petsTable.getModel();
 			Pet newPet = new Pet("", "");
-	
 			int viewSelectedRow = peopleTable.getSelectedRow();
-			int modelSelectedRow = peopleTable
-					.convertRowIndexToModel(viewSelectedRow);
-			PeopleTableModel peopleModel = (PeopleTableModel) peopleTable
-					.getModel();
+			int modelSelectedRow = peopleTable.convertRowIndexToModel(viewSelectedRow);
+			PeopleTableModel peopleModel = (PeopleTableModel) peopleTable.getModel();
 			Person person = application.getPersonAt(modelSelectedRow);
-	
 			newPet.setOwner(person);
 			newPet.save();
-	
 			peopleModel.reloadPerson(person);
-	
-			peopleTable.setRowSelectionInterval(viewSelectedRow,
-					viewSelectedRow);
-	
+			peopleTable.setRowSelectionInterval(viewSelectedRow, viewSelectedRow);
 			petsModel.addPet(newPet);
-	
 			petsTable.setColumnSelectionInterval(1, 1);
-			petsTable.setRowSelectionInterval(
-					petsModel.getRowCount() - 1, petsModel
-							.getRowCount() - 1);
+			petsTable.setRowSelectionInterval(petsModel.getRowCount() - 1, petsModel.getRowCount() - 1);
 			petsTable.editCellAt(0, 1);
 			petsTable.requestFocus();
 		}
 	}
+	
 }

@@ -11,9 +11,9 @@ import domain.Person;
 import domain.Pet;
 
 public class PetsTableModel extends AbstractTableModel implements Observer{
+	
 	private static final long serialVersionUID = 3449532699477970153L;
 	private Person person;
-	
 	private String[] columns = { "ID", "Name", "Breed" };
 
 	public PetsTableModel(Person person) {

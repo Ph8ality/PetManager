@@ -3,15 +3,16 @@ package ui.listeners;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import ui.PetManagerFrame;
 import ui.models.PeopleTableModel;
 
 public class PeopleTableSelectionListener implements ListSelectionListener {
+	
 	private JTable table;
 	private PetManagerFrame view;
 
-	public PeopleTableSelectionListener(JTable listenedTable,
-			PetManagerFrame editView) {
+	public PeopleTableSelectionListener(JTable listenedTable, PetManagerFrame editView) {
 		this.table = listenedTable;
 		this.view = editView;
 	}
@@ -35,4 +36,5 @@ public class PeopleTableSelectionListener implements ListSelectionListener {
 	private boolean mouseHasBeenReleased(ListSelectionEvent e) {
 		return !e.getValueIsAdjusting();
 	}
+	
 }
