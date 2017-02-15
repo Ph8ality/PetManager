@@ -65,8 +65,11 @@ public class Pet implements ActiveRecord {
 	
 	public boolean delete() {
 		try {
-			if (isInDB())
+			if (isInDB()) {
 				ActiveRecordManager.execute("DELETE FROM pet WHERE id = ?", Integer.toString(id));
+				List<Integer> lastIdList = ActiveRecordManager.getIntegerList("SELECT MAX(id) FROM pet;");
+				ActiveRecordManager.execute("UPDATE sqlite_sequence SET seq=? WHERE name='pet';", lastIdList.get(0).toString());
+			}
 		} catch (SQLException e) {
 			return false;
 		}

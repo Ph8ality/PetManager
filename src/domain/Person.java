@@ -80,6 +80,8 @@ public class Person extends Observable implements ActiveRecord {
 		try {
 			if (isInDB()) {
 				ActiveRecordManager.execute("DELETE FROM pet WHERE owner=?;", Integer.toString(id));
+				List<Integer> lastIdListPet = ActiveRecordManager.getIntegerList("SELECT MAX(id) FROM pet;");
+				ActiveRecordManager.execute("UPDATE sqlite_sequence SET seq=? WHERE name='pet';", lastIdListPet.get(0).toString());
 				ActiveRecordManager.execute("DELETE FROM people WHERE id=?;", Integer.toString(id));
 				List<Integer> lastIdList = ActiveRecordManager.getIntegerList("SELECT MAX(id) FROM people;");
 				ActiveRecordManager.execute("UPDATE sqlite_sequence SET seq=? WHERE name='people';", lastIdList.get(0).toString());
