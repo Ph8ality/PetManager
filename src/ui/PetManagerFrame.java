@@ -155,6 +155,9 @@ public class PetManagerFrame extends JFrame {
 			peopleTable = new JTable(model);
 			peopleTable.setAutoCreateRowSorter(true);
 			peopleTable.setRowSorter(sorter);
+			List <RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+			sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+			sorter.setSortKeys(sortKeys); 
 			peopleTable.setRowHeight(26);
 			TableColumn col = peopleTable.getColumnModel().getColumn(2);
 			JComboBox comboBox = new JComboBox(new JobListModel());
@@ -220,7 +223,6 @@ public class PetManagerFrame extends JFrame {
 					getPeopleTable().requestFocus();
 				}
 			});
-
 			addPersonButton.setIcon(addIcon);
 			addPersonButton.setFont(buttonFont);
 		}
