@@ -210,10 +210,13 @@ public class PetManagerFrame extends JFrame {
 			addPersonButton.setText("add Person");
 			addPersonButton.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent evt) {
-					application.addPerson(new Person("", ""));
+					Person p = new Person("", "");
+					application.addPerson(p);
+					int modelIndex = application.getPeopleList().indexOf(p);
+					int viewIndex = peopleTable.convertRowIndexToView(modelIndex);
 					getPeopleTable().setColumnSelectionInterval(1, 1);
-					getPeopleTable().setRowSelectionInterval(0, 0);
-					getPeopleTable().editCellAt(0, 1);
+					getPeopleTable().setRowSelectionInterval(viewIndex, viewIndex);
+					getPeopleTable().editCellAt(viewIndex, 1);
 					getPeopleTable().requestFocus();
 				}
 			});
