@@ -114,18 +114,13 @@ public class PeopleTableModel extends AbstractTableModel implements Observer{
 				if(update.getInsertedElements().length == 1) {
 					int pos = update.getInsertedElements()[0];
 					fireTableRowsInserted(pos, pos);
-				} else {
-					fireTableDataChanged();
 				}
 				if(update.getDeletedElements().length == 1) {
 					int pos = update.getDeletedElements()[0];
 					fireTableRowsDeleted(pos, pos);
-				} else {
-					fireTableDataChanged();
-				}			
-			} else {
+				}
 				fireTableDataChanged();
-			} 
+			}
 		}
 	}
 
